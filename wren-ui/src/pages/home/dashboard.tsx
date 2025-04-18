@@ -4,10 +4,12 @@ import { Path } from '@/utils/enum';
 import { useRouter } from 'next/router';
 import SiderLayout from '@/components/layouts/SiderLayout';
 import useHomeSidebar from '@/hooks/useHomeSidebar';
+import useModalAction from '@/hooks/useModalAction';
 import { LoadingWrapper } from '@/components/PageLoading';
 import DashboardGrid from '@/components/pages/home/dashboardGrid';
 import EmptyDashboard from '@/components/pages/home/dashboardGrid/EmptyDashboard';
 import DashboardHeader from '@/components/pages/home/dashboardGrid/DashboardHeader';
+import ScheduleRefreshTimeModal from '@/components/modals/ScheduleRefreshTimeModal';
 import {
   useDashboardItemsQuery,
   useDeleteDashboardItemMutation,
@@ -18,6 +20,7 @@ import { ItemLayoutInput } from '@/apollo/client/graphql/__types__';
 export default function Dashboard() {
   const router = useRouter();
   const homeSidebar = useHomeSidebar();
+  const scheduleRefreshTimeModal = useModalAction();
 
   const {
     data,
@@ -64,17 +67,45 @@ export default function Dashboard() {
     await deleteDashboardItem({ variables: { where: { id } } });
   };
 
+  // const schedule = {
+  //   frequency: 'WEEKLY',
+  //   day: 'MONDAY',
+  //   hour: 0,
+  //   minute: 0,
+  // };
+
+  const schedule = {
+    frequency: 'NEVER',
+    day: null,
+    hour: null,
+    minute: null,
+  };
+  const nextScheduleTime = '2025-04-21T10:46:59.495Z';
+
   return (
     <SiderLayout loading={false} color="gray-3" sidebar={homeSidebar}>
       <LoadingWrapper loading={loading}>
-        <EmptyDashboard show={dashboardItems.length === 0}>
-          <DashboardHeader />
-          <DashboardGrid
-            items={dashboardItems}
-            onUpdateChange={onUpdateChange}
-            onDelete={onDelete}
+        <>
+          <EmptyDashboard show={dashboardItems.length === 0}>
+            <DashboardHeader
+              schedule={schedule}
+              nextScheduleTime={nextScheduleTime}
+              onScheduleRefreshTime={() =>
+                scheduleRefreshTimeModal.openModal(schedule)
+              }
+            />
+            <DashboardGrid
+              items={dashboardItems}
+              onUpdateChange={onUpdateChange}
+              onDelete={onDelete}
+            />
+          </EmptyDashboard>
+          <ScheduleRefreshTimeModal
+            {...scheduleRefreshTimeModal.state}
+            onClose={scheduleRefreshTimeModal.closeModal}
+            onSubmit={async () => {}}
           />
-        </EmptyDashboard>
+        </>
       </LoadingWrapper>
     </SiderLayout>
   );

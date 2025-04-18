@@ -1,9 +1,16 @@
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import styled from 'styled-components';
+import EditOutlined from '@ant-design/icons/EditOutlined';
+import {
+  Schedule,
+  getScheduleText,
+} from '@/components/modals/ScheduleRefreshTimeModal';
+import { getCompactTime } from '@/utils/time';
 
 interface Props {
-  title: string;
-  onBrowseMetrics?: () => void;
+  nextScheduleTime?: string;
+  schedule?: Schedule;
+  onScheduleRefreshTime: () => void;
 }
 
 const StyledHeader = styled.div`
@@ -17,15 +24,41 @@ const StyledHeader = styled.div`
 `;
 
 export default function DashboardHeader(props: Props) {
-  const { title, onBrowseMetrics } = props;
+  const { nextScheduleTime, schedule, onScheduleRefreshTime } = props;
+
+  const scheduleTime = getScheduleText(schedule);
+
   return (
     <StyledHeader>
       <div />
-      {/* <span className="text-medium text-md gray-9">{title}</span>
-      {onBrowseMetrics && (
-        <Button onClick={onBrowseMetrics}>Browse Metrics</Button>
-      )} */}
-      <div>Schedule refresh time: Daily 10AM</div>
+      <div>
+        {schedule && (
+          <div>
+            <div className="text-sm gray-6 text-medium">
+              Schedule refresh time
+            </div>
+            <div className="d-flex align-center gray-8 gx-2">
+              {nextScheduleTime ? (
+                <Tooltip
+                  title={`Next schedule: ${getCompactTime(nextScheduleTime)}`}
+                >
+                  <span className="cursor-pointer">{scheduleTime}</span>
+                </Tooltip>
+              ) : (
+                scheduleTime
+              )}
+              <Button
+                type="text"
+                className="gray-6"
+                icon={<EditOutlined />}
+                onClick={onScheduleRefreshTime}
+              >
+                {/* Schedule refresh time */}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </StyledHeader>
   );
 }
