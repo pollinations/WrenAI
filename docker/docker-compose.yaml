@@ -28,6 +28,7 @@ services:
     volumes:
       - data:/usr/src/app/etc
       - ${PROJECT_DIR}/data:/usr/src/app/data
+      - ../data:/app/local_data
     networks:
       - wren
     depends_on:
@@ -61,6 +62,7 @@ services:
       - ${PROJECT_DIR}/.env
     volumes:
       - ${PROJECT_DIR}/config.yaml:/app/data/config.yaml
+      - ../data:/app/local_data
     networks:
       - wren
     depends_on:
@@ -112,6 +114,8 @@ services:
       - ${HOST_PORT}:3000
     volumes:
       - data:/app/data
+      - ../data:/app/local_data
+      - ../sieb-logo-white-with-text.svg:/app/public/images/logo-white-with-text.svg
     networks:
       - wren
     depends_on:
