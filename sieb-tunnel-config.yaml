@@ -1,8 +1,0 @@
-tunnel: 6d7bed99-6cdb-4860-ba30-699ff62f613b
-credentials-file: /Users/thomash/.cloudflared/6d7bed99-6cdb-4860-ba30-699ff62f613b.json
-ingress:
-  - hostname: sieb.pollinations.ai
-    service: http://localhost:23000
-  - hostname: sieb-ai.pollinations.ai
-    service: http://localhost:5555
-  - service: http_status:404

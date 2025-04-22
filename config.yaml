@@ -1,0 +1,17 @@
+# Basic configuration for wren-ai-service
+openai:
+  api_key: ${OPENAI_API_KEY}
+  model: gpt-4-turbo-preview
+
+qdrant:
+  host: ${QDRANT_HOST}
+  port: 6333
+
+# Database configuration
+database:
+  type: sqlite
+  path: /app/local_data/sieb.db
+
+# Logging configuration
+logging:
+  level: INFO
